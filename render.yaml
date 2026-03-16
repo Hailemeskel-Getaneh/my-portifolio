@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: portfolio-backend
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    disk:
+      name: portfolio-db
+      mountPath: db # Relative to rootDir
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        fromContext: secret
+      - key: ALLOWED_ORIGIN
+        placeholder: "https://hailemeskel.vercel.app"
