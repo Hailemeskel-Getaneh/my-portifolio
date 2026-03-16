@@ -24,8 +24,8 @@ export const DataProvider = ({ children }) => {
                 const result = await response.json();
                 setData(result);
             } catch (err) {
-                console.error("Error fetching dynamic data:", err);
-                setError(err.message);
+                console.error(`[CONN_ERROR] Attempted fetch from: ${config.API_URL}`);
+                setError(`${err.message} (Target: ${config.API_URL})`);
             } finally {
                 setLoading(false);
             }
