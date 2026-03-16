@@ -15,4 +15,4 @@ services:
       - key: JWT_SECRET
         fromContext: secret
       - key: ALLOWED_ORIGIN
-        placeholder: "https://your-portfolio.vercel.app"
+        placeholder: "https://hailemeskel.vercel.app"
