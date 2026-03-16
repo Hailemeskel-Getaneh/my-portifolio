@@ -4,6 +4,7 @@ node_modules/
 backend/node_modules/
 backend/.env
 backend/db/portfolio.db
+backend/uploads/
 frontend/node_modules/
 frontend/dist/
 .DS_Store
