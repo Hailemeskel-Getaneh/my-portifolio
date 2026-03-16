@@ -20,11 +20,60 @@ import AdminDashboard from './admin/AdminDashboard';
    Public portfolio page
 ─────────────────────────────────────────────── */
 function PortfolioPage() {
-  const { data } = usePortfolioData();
+  const { data, loading, error } = usePortfolioData();
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  if (loading) {
+    return (
+      <div style={{ 
+        height: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        background: '#0a0a0a',
+        color: 'var(--accent-cyan)',
+        fontFamily: 'monospace'
+      }}>
+        <div className="animate-pulse">Initializing System... [FETCHING_CORE_DATA]</div>
+      </div>
+    );
+  }
+
+  if (error) {
+     return (
+        <div style={{ 
+          height: '100vh', 
+          display: 'flex', 
+          flexDirection: 'column',
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          background: '#0a0a0a',
+          color: '#ef4444',
+          fontFamily: 'monospace',
+          padding: '2rem',
+          textAlign: 'center'
+        }}>
+          <div>[CRITICAL_FAILURE] Failed to establish secure connection with backend.</div>
+          <div style={{ color: '#6b7280', marginTop: '1rem', fontSize: '0.8rem' }}>Error: {error}</div>
+          <button 
+            onClick={() => window.location.reload()}
+            style={{ 
+              marginTop: '2rem', 
+              padding: '0.5rem 1rem', 
+              border: '1px solid #ef4444', 
+              background: 'transparent',
+              color: '#ef4444',
+              cursor: 'pointer'
+            }}
+          >
+            Retry Connection
+          </button>
+        </div>
+      );
+  }
 
   return (
     <>
