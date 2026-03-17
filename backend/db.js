@@ -1,8 +1,15 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const bcrypt = require('bcryptjs');
+const fs = require('fs');
 
-const dbPath = path.resolve(__dirname, 'portfolio.db');
+// Path to persistent data folder
+const dataDir = path.resolve(__dirname, 'data');
+if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+}
+
+const dbPath = path.join(dataDir, 'portfolio.db');
 const db = new sqlite3.Database(dbPath);
 
 const initializeDatabase = () => {
@@ -75,7 +82,7 @@ const initializeDatabase = () => {
 
         // Seed Data if Personal Info is empty
         db.get('SELECT COUNT(*) as count FROM personal_info', (err, row) => {
-            if (row.count === 0) {
+            if (row && row.count === 0) {
                 console.log('[SYS] Database fresh. Seeding initial dynamic data...');
 
                 // Seed Admin (Default: admin / password123)

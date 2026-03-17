@@ -4,18 +4,21 @@ const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
-const dbHelper = require('./db/database');
+const dbHelper = require('./db');
 const apiRoutes = require('./routes/api');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'http://localhost:5173';
 
-// Ensure upload directory exists
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-}
+// Ensure data and upload directories exist
+const dataDir = path.join(__dirname, 'data');
+const uploadDir = path.join(dataDir, 'uploads');
+[dataDir, uploadDir].forEach(dir => {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+});
 
 // Middleware
 app.use(cors({
