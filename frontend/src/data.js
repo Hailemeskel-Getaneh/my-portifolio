@@ -2,62 +2,81 @@ import { Code, Server, Database, Terminal, Cpu, Globe } from 'lucide-react';
 
 export const portfolioData = {
     personalInfo: {
-        name: "Haile",
-        title: "Backend Developer & Systems Architect",
-        tagline: "Building scalable logic, robust APIs, and optimizing data flow.",
-        about: "I specialize in creating efficient, secure, and highly available backend systems. While others focus on the surface, I engineer the core mechanisms that power the web.",
-        email: "contact@haile.dev",
-        github: "https://github.com/haile",
-        linkedin: "https://linkedin.com/in/haile"
+        name: "Hailemeskel Getaneh",
+        title: "Backend Engineer & Systems Architect",
+        tagline: "Engineering high-performance backends, resilient APIs, and seamless digital experiences.",
+        about: "I am a Full-Stack Software Engineer with a passion for building scalable, secure, and intuitive systems. With deep expertise in Node.js, Python, and cloud infrastructure, I focus on the underlying architecture that makes modern web applications fast and reliable.",
+        email: "hailemeskel.getaneh@outlook.com",
+        github: "https://github.com/hailemeskel-getaneh",
+        linkedin: "https://linkedin.com/in/hailemeskel-getaneh",
+        profile_image: null
     },
     skills: [
-        { name: "Node.js", category: "Language/Runtime", level: 90 },
-        { name: "Python", category: "Language", level: 85 },
-        { name: "Go", category: "Language", level: 75 },
-        { name: "PostgreSQL", category: "Database", level: 88 },
-        { name: "MongoDB", category: "Database", level: 80 },
-        { name: "Redis", category: "Database/Cache", level: 70 },
+        { name: "Node.js", category: "Runtime", level: 95 },
+        { name: "JavaScript", category: "Language", level: 95 },
+        { name: "TypeScript", category: "Language", level: 90 },
+        { name: "Python", category: "Language", level: 88 },
+        { name: "React", category: "Frontend", level: 92 },
+        { name: "PostgreSQL", category: "Database", level: 90 },
         { name: "Docker", category: "DevOps", level: 85 },
-        { name: "AWS", category: "Cloud", level: 75 },
+        { name: "C", category: "Language", level: 75 },
     ],
     services: [
-        { title: "API Development", description: "RESTful & GraphQL APIs with high throughput and low latency.", icon: "Server" },
-        { title: "Database Architecture", description: "Schema design, indexing, and query optimization for scale.", icon: "Database" },
-        { title: "System Integration", description: "Connecting microservices and third-party APIs securely.", icon: "Cpu" },
-        { title: "DevOps & CI/CD", description: "Automated pipelines and containerized deployments.", icon: "Terminal" }
+        { title: "Full-Stack Development", description: "Building end-to-end applications with modern stacks like MERN and Next.js.", icon: "Globe" },
+        { title: "API & Microservices", description: "Designing robust, scalable backend architectures and secure RESTful APIs.", icon: "Server" },
+        { title: "Database Systems", description: "Expert schema design and optimization for SQL and NoSQL databases.", icon: "Database" },
+        { title: "System Engineering", description: "Implementing low-level logic and high-performance computation modules.", icon: "Cpu" }
     ],
     projects: [
         {
             id: "proj-1",
-            title: "Auth Gateway Microservice",
-            description: "A centralized JWT authentication service handling 10k+ requests per minute with Redis caching.",
-            technologies: ["Go", "Redis", "Docker"],
-            link: "#",
-            status: "200 OK"
+            title: "wanderEthio",
+            description: "A comprehensive tourism platform designed to enhance the travel experience in Ethiopia with seamless registration and booking.",
+            technologies: ["JavaScript", "Node.js", "Express", "MongoDB"],
+            link: "https://github.com/hailemeskel-getaneh/wanderEthio",
+            status: "PUBLIC"
         },
         {
             id: "proj-2",
-            title: "Real-time Data Pipeline",
-            description: "WebSocket-based streaming data pipeline processing financial market data in real-time.",
-            technologies: ["Node.js", "Socket.io", "PostgreSQL"],
-            link: "#",
-            status: "200 OK"
+            title: "gitglow",
+            description: "A premium GitHub statistics generator that creates dynamic, glassmorphism-inspired SVG cards for profile READMEs.",
+            technologies: ["JavaScript", "SVG", "GitHub API", "Node.js"],
+            link: "https://github.com/hailemeskel-getaneh/gitglow",
+            status: "STABLE"
         },
         {
             id: "proj-3",
-            title: "E-Commerce Logistics Engine",
-            description: "complex routing algorithm and inventory management API for a massive retail platform.",
-            technologies: ["Python", "FastAPI", "MongoDB"],
-            link: "#",
-            status: "200 OK"
+            title: "brainbox",
+            description: "A lightweight web application designed to help you capture, organize, and manage thoughts, topics, and notes.",
+            technologies: ["TypeScript", "React", "Node.js", "Express"],
+            link: "https://github.com/hailemeskel-getaneh/brainbox",
+            status: "PUBLIC"
+        },
+        {
+            id: "proj-4",
+            title: "QuizApp",
+            description: "A MERN stack quiz application with a timer and an admin panel for managing users and questions.",
+            technologies: ["JavaScript", "React", "Node.js", "MongoDB"],
+            link: "https://github.com/hailemeskel-getaneh/QuizApp",
+            status: "PUBLIC"
+        },
+        {
+            id: "proj-5",
+            title: "ethco-ai",
+            description: "An AI-powered platform for Ethiopian context, leveraging modern machine learning and TypeScript.",
+            technologies: ["TypeScript", "React", "Tailwind", "Python"],
+            link: "https://github.com/hailemeskel-getaneh/ethco-ai",
+            status: "STABLE"
         }
     ],
+
     terminalLogs: [
-        "Establishing secure connection to server...",
-        "Authenticating user credentials...",
-        "Access granted. Loading backend modules...",
-        "Initializing database connections... [OK]",
-        "Starting core engine... [OK]",
-        "System ready. Welcome."
+        "Initializing secure kernel connection... [OK]",
+        "Loading Hailemeskel_Core_Modules... [SUCCESS]",
+        "Scanning local databases for active repositories...",
+        "Establishing encrypted link to GitHub API...",
+        "System state: OPERATIONAL",
+        "Welcome to the control center. Execute 'GET /portfolio' to begin."
     ]
 };
+

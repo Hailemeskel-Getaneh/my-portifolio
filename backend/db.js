@@ -93,17 +93,27 @@ const initializeDatabase = () => {
                 // Seed Personal Info
                 db.run(`INSERT INTO personal_info (name, title, tagline, about, email, github, linkedin) 
           VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                    ["Haile", "Software Developer & Systems Architect", "Building scalable logic, robust APIs, and optimizing data flow.", "I specialize in creating efficient, secure, and highly available systems across the stack. While others focus on the surface, I engineer the core mechanisms that power the web.", "contact@haile.dev", "https://github.com/haile", "https://linkedin.com/in/haile"]
+                    [
+                        "Hailemeskel Getaneh", 
+                        "Full-Stack Software Engineer & Systems Architect", 
+                        "Engineering high-performance backends, resilient APIs, and seamless digital experiences.", 
+                        "I am a Full-Stack Software Engineer with a passion for building scalable, secure, and intuitive systems. With deep expertise in Node.js, Python, and cloud infrastructure, I focus on the underlying architecture that makes modern web applications fast and reliable.", 
+                        "hailegetaneh1221@gmail.com", 
+                        "https://github.com/hailemeskel-getaneh", 
+                        "https://linkedin.com/in/hailemeskel-getaneh"
+                    ]
                 );
 
                 // Seed Skills
                 const skills = [
-                    ["Node.js", "Backend", 90],
-                    ["Python", "Backend", 85],
-                    ["Go", "Backend", 75],
-                    ["PostgreSQL", "Database", 88],
+                    ["Node.js", "Runtime", 95],
+                    ["JavaScript", "Language", 95],
+                    ["TypeScript", "Language", 90],
+                    ["Python", "Language", 88],
+                    ["React", "Frontend", 92],
+                    ["PostgreSQL", "Database", 90],
                     ["Docker", "DevOps", 85],
-                    ["React", "Frontend", 80]
+                    ["C", "Language", 75]
                 ];
                 const stmt = db.prepare(`INSERT INTO skills (name, category, level) VALUES (?, ?, ?)`);
                 skills.forEach(skill => stmt.run(skill));
@@ -111,12 +121,17 @@ const initializeDatabase = () => {
 
                 // Seed Projects
                 const projects = [
-                    ["Auth Gateway Microservice", "A centralized JWT authentication service handling 10k+ requests per minute.", "Go, Redis, Docker", "#", "200 OK"],
-                    ["Real-time Data Pipeline", "WebSocket-based streaming data pipeline processing market data in real-time.", "Node.js, Socket.io, PostgreSQL", "#", "200 OK"]
+                    ["wanderEthio", "A comprehensive tourism platform designed to enhance the travel experience in Ethiopia with seamless registration and booking.", "JavaScript, Node.js, Express, MongoDB", "https://github.com/hailemeskel-getaneh/wanderEthio", "PUBLIC"],
+                    ["gitglow", "A premium GitHub statistics generator that creates dynamic, glassmorphism-inspired SVG cards for profile READMEs.", "JavaScript, SVG, GitHub API, Node.js", "https://github.com/hailemeskel-getaneh/gitglow", "STABLE"],
+                    ["brainbox", "A lightweight web application designed to help you capture, organize, and manage thoughts, topics, and notes.", "TypeScript, React, Node.js, Express", "https://github.com/hailemeskel-getaneh/brainbox", "PUBLIC"],
+                    ["QuizApp", "A MERN stack quiz application with a timer and an admin panel for managing users and questions.", "JavaScript, React, Node.js, MongoDB", "https://github.com/hailemeskel-getaneh/QuizApp", "PUBLIC"],
+                    ["ethco-ai", "An AI-powered platform for Ethiopian context, leveraging modern machine learning and TypeScript.", "TypeScript, React, Tailwind, Python", "https://github.com/hailemeskel-getaneh/ethco-ai", "STABLE"]
                 ];
                 const projStmt = db.prepare(`INSERT INTO projects (title, description, technologies, link, status) VALUES (?, ?, ?, ?, ?)`);
                 projects.forEach(proj => projStmt.run(proj));
                 projStmt.finalize();
+
+
             }
         });
     });

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import config from '../config';
+import { portfolioData } from '../data';
 
 const DataContext = createContext(null);
 
@@ -12,7 +13,7 @@ export const usePortfolioData = () => {
 };
 
 export const DataProvider = ({ children }) => {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState(portfolioData); // Initialize with realistic fallback data
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -22,10 +23,15 @@ export const DataProvider = ({ children }) => {
                 const response = await fetch(`${config.API_URL}/public/data`);
                 if (!response.ok) throw new Error('Failed to fetch data');
                 const result = await response.json();
-                setData(result);
+                
+                // If the backend returns data, prioritize it
+                if (result && Object.keys(result).length > 0) {
+                    setData(result);
+                }
             } catch (err) {
-                console.error(`[CONN_ERROR] Attempted fetch from: ${config.API_URL}`);
-                setError(`${err.message} (Target: ${config.API_URL})`);
+                console.warn(`[DATA_SYNC] Backend fetch failed, using fallback data. Target: ${config.API_URL}`);
+                // We don't set a hard error here anymore, because we have a reliable fallback
+                // This prevents the "disappearing" UI issue.
             } finally {
                 setLoading(false);
             }
@@ -40,3 +46,4 @@ export const DataProvider = ({ children }) => {
         </DataContext.Provider>
     );
 };
+
