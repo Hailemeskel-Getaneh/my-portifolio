@@ -91,33 +91,33 @@ const initializeDatabase = () => {
                 db.run(`INSERT INTO admin (username, password) VALUES (?, ?)`, ['admin', hash]);
 
                 // Seed Personal Info
-                db.run(`INSERT INTO personal_info (name, title, tagline, about, email, github, linkedin) 
-          VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                db.run(`INSERT INTO personal_info (name, title, tagline, about, email, github, linkedin, profile_image) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
                     [
-                        "Hailemeskel Getaneh", 
-                        "Full-Stack Software Engineer & Systems Architect", 
+                        "Haile", 
+                        "Backend Engineer & Systems Architect", 
                         "Engineering high-performance backends, resilient APIs, and seamless digital experiences.", 
                         "I am a Full-Stack Software Engineer with a passion for building scalable, secure, and intuitive systems. With deep expertise in Node.js, Python, and cloud infrastructure, I focus on the underlying architecture that makes modern web applications fast and reliable.", 
-                        "hailegetaneh1221@gmail.com", 
+                        "hailemeskel.getaneh@outlook.com", 
                         "https://github.com/hailemeskel-getaneh", 
-                        "https://linkedin.com/in/hailemeskel-getaneh"
+                        "https://linkedin.com/in/hailemeskel-getaneh",
+                        "/uploads/haile.png"
                     ]
                 );
 
                 // Seed Skills
                 const skills = [
-                    ["Node.js", "Runtime", 95],
-                    ["JavaScript", "Language", 95],
-                    ["TypeScript", "Language", 90],
-                    ["Python", "Language", 88],
-                    ["React", "Frontend", 92],
-                    ["PostgreSQL", "Database", 90],
-                    ["Docker", "DevOps", 85],
-                    ["C", "Language", 75]
+                    ["Node.js", "Runtime", 95, "/uploads/nodejs.png"],
+                    ["Python", "Language", 88, "/uploads/python.png"],
+                    ["React", "Frontend", 92, "/uploads/react.png"],
+                    ["PostgreSQL", "Database", 90, "/uploads/postgres.png"],
+                    ["MongoDB", "Database", 85, "/uploads/mongo.png"],
+                    ["Docker", "DevOps", 88, "/uploads/docker.png"]
                 ];
-                const stmt = db.prepare(`INSERT INTO skills (name, category, level) VALUES (?, ?, ?)`);
+                const stmt = db.prepare(`INSERT INTO skills (name, category, level, icon_url) VALUES (?, ?, ?, ?)`);
                 skills.forEach(skill => stmt.run(skill));
                 stmt.finalize();
+
 
                 // Seed Projects
                 const projects = [

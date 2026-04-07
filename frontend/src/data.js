@@ -2,25 +2,26 @@ import { Code, Server, Database, Terminal, Cpu, Globe } from 'lucide-react';
 
 export const portfolioData = {
     personalInfo: {
-        name: "Hailemeskel Getaneh",
+        name: "Haile",
         title: "Backend Engineer & Systems Architect",
         tagline: "Engineering high-performance backends, resilient APIs, and seamless digital experiences.",
         about: "I am a Full-Stack Software Engineer with a passion for building scalable, secure, and intuitive systems. With deep expertise in Node.js, Python, and cloud infrastructure, I focus on the underlying architecture that makes modern web applications fast and reliable.",
         email: "hailemeskel.getaneh@outlook.com",
         github: "https://github.com/hailemeskel-getaneh",
         linkedin: "https://linkedin.com/in/hailemeskel-getaneh",
-        profile_image: null
+        profile_image: "/uploads/haile.png"
     },
     skills: [
-        { name: "Node.js", category: "Runtime", level: 95 },
-        { name: "JavaScript", category: "Language", level: 95 },
-        { name: "TypeScript", category: "Language", level: 90 },
-        { name: "Python", category: "Language", level: 88 },
-        { name: "React", category: "Frontend", level: 92 },
-        { name: "PostgreSQL", category: "Database", level: 90 },
-        { name: "Docker", category: "DevOps", level: 85 },
-        { name: "C", category: "Language", level: 75 },
+        { name: "Node.js", category: "Runtime", level: 95, icon_url: "/uploads/nodejs.png" },
+        { name: "Python", category: "Language", level: 90, icon_url: "/uploads/python.png" },
+        { name: "React", category: "Frontend", level: 92, icon_url: "/uploads/react.png" },
+        { name: "PostgreSQL", category: "Database", level: 90, icon_url: "/uploads/postgres.png" },
+        { name: "MongoDB", category: "Database", level: 85, icon_url: "/uploads/mongo.png" },
+        { name: "Docker", category: "DevOps", level: 88, icon_url: "/uploads/docker.png" },
+        { name: "TypeScript", category: "Language", level: 90, icon_url: "/uploads/github.png" }, // Using github icon as placeholder for TS if not present
+        { name: "Git", category: "Tool", level: 85, icon_url: "/uploads/git.png" },
     ],
+
     services: [
         { title: "Full-Stack Development", description: "Building end-to-end applications with modern stacks like MERN and Next.js.", icon: "Globe" },
         { title: "API & Microservices", description: "Designing robust, scalable backend architectures and secure RESTful APIs.", icon: "Server" },

@@ -27,7 +27,11 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json());
+
+// Serve static assets from both the repo's uploads and the persistent volume's uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads', express.static(uploadDir));
+
 
 // Initialize Database structure and seed default data if empty
 dbHelper.initializeDatabase();
