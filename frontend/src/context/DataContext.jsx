@@ -19,38 +19,30 @@ export const DataProvider = ({ children }) => {
 
     useEffect(() => {
         const fetchData = async () => {
+            const baseUrl = config.API_URL.replace('/api', '');
+            const fixUrlForBackend = (url) => (url && url.startsWith('/uploads/')) ? `${baseUrl}${url}` : url;
+
             try {
                 const response = await fetch(`${config.API_URL}/public/data`);
                 if (!response.ok) throw new Error('Failed to fetch data');
                 let result = await response.json();
                 
-                // Helper to fix local upload URLs
-                const baseUrl = config.API_URL.replace('/api', '');
-                const fixUrl = (url) => (url && url.startsWith('/uploads/')) ? `${baseUrl}${url}` : url;
-
                 if (result && Object.keys(result).length > 0) {
-                    // Process Personal Info
+                    // Process Personal Info from Backend
                     if (result.personalInfo) {
-                        result.personalInfo.profile_image = fixUrl(result.personalInfo.profile_image);
+                        result.personalInfo.profile_image = fixUrlForBackend(result.personalInfo.profile_image);
                     }
-                    // Process Skills
+                    // Process Skills from Backend
                     if (result.skills) {
-                        result.skills = result.skills.map(s => ({ ...s, icon_url: fixUrl(s.icon_url) }));
+                        result.skills = result.skills.map(s => ({ ...s, icon_url: fixUrlForBackend(s.icon_url) }));
                     }
                     setData(result);
                 }
             } catch (err) {
-                console.warn(`[DATA_SYNC] Backend fetch failed or timed out. Falling back to static assets. Target: ${config.API_URL}`);
+                console.warn(`[DATA_SYNC] Backend fetch failed. Falling back to frontend assets. Target: ${config.API_URL}`);
                 
-                // Process fallback data too
-                const baseUrl = config.API_URL.replace('/api', '');
-                const fixUrl = (url) => (url && url.startsWith('/uploads/')) ? `${baseUrl}${url}` : url;
-                
-                const fallbackData = { ...portfolioData };
-                fallbackData.personalInfo.profile_image = fixUrl(fallbackData.personalInfo.profile_image);
-                fallbackData.skills = fallbackData.skills.map(s => ({ ...s, icon_url: fixUrl(s.icon_url) }));
-                
-                setData(fallbackData);
+                // Fallback data uses relative paths (which work from frontend public/uploads)
+                setData({ ...portfolioData });
             } finally {
                 setLoading(false);
             }
@@ -58,6 +50,7 @@ export const DataProvider = ({ children }) => {
 
         fetchData();
     }, []);
+
 
 
     return (
