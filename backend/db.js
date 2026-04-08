@@ -80,7 +80,7 @@ const initializeDatabase = () => {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`);
 
-        // Seed Data if Personal Info is empty
+        // Seed Data if Personal Info is empty (fresh DB)
         db.get('SELECT COUNT(*) as count FROM personal_info', (err, row) => {
             if (row && row.count === 0) {
                 console.log('[SYS] Database fresh. Seeding initial dynamic data...');
@@ -90,52 +90,70 @@ const initializeDatabase = () => {
                 const hash = bcrypt.hashSync('password123', salt);
                 db.run(`INSERT INTO admin (username, password) VALUES (?, ?)`, ['admin', hash]);
 
-                // Seed Personal Info
-                db.run(`INSERT INTO personal_info (name, title, tagline, about, email, github, linkedin, profile_image) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                    [
-                        "Haile", 
-                        "Backend Engineer & Systems Architect", 
-                        "Engineering high-performance backends, resilient APIs, and seamless digital experiences.", 
-                        "I am a Full-Stack Software Engineer with a passion for building scalable, secure, and intuitive systems. With deep expertise in Node.js, Python, and cloud infrastructure, I focus on the underlying architecture that makes modern web applications fast and reliable.", 
-                        "hailemeskel.getaneh@outlook.com", 
-                        "https://github.com/hailemeskel-getaneh", 
-                        "https://linkedin.com/in/hailemeskel-getaneh",
-                        "/uploads/haile.png"
-                    ]
-                );
-
-                // Seed Skills
-                const skills = [
-                    ["Node.js", "Runtime", 95, "/uploads/nodejs.png"],
-                    ["Python", "Language", 88, "/uploads/python.png"],
-                    ["React", "Frontend", 92, "/uploads/react.png"],
-                    ["PostgreSQL", "Database", 90, "/uploads/postgres.png"],
-                    ["MongoDB", "Database", 85, "/uploads/mongo.png"],
-                    ["Docker", "DevOps", 88, "/uploads/docker.png"]
-                ];
-                const stmt = db.prepare(`INSERT INTO skills (name, category, level, icon_url) VALUES (?, ?, ?, ?)`);
-                skills.forEach(skill => stmt.run(skill));
-                stmt.finalize();
-
-
-                // Seed Projects
-                const projects = [
-                    ["wanderEthio", "A comprehensive tourism platform designed to enhance the travel experience in Ethiopia with seamless registration and booking.", "JavaScript, Node.js, Express, MongoDB", "https://github.com/hailemeskel-getaneh/wanderEthio", "PUBLIC"],
-                    ["gitglow", "A premium GitHub statistics generator that creates dynamic, glassmorphism-inspired SVG cards for profile READMEs.", "JavaScript, SVG, GitHub API, Node.js", "https://github.com/hailemeskel-getaneh/gitglow", "STABLE"],
-                    ["brainbox", "A lightweight web application designed to help you capture, organize, and manage thoughts, topics, and notes.", "TypeScript, React, Node.js, Express", "https://github.com/hailemeskel-getaneh/brainbox", "PUBLIC"],
-                    ["QuizApp", "A MERN stack quiz application with a timer and an admin panel for managing users and questions.", "JavaScript, React, Node.js, MongoDB", "https://github.com/hailemeskel-getaneh/QuizApp", "PUBLIC"],
-                    ["ethco-ai", "An AI-powered platform for Ethiopian context, leveraging modern machine learning and TypeScript.", "TypeScript, React, Tailwind, Python", "https://github.com/hailemeskel-getaneh/ethco-ai", "STABLE"]
-                ];
-                const projStmt = db.prepare(`INSERT INTO projects (title, description, technologies, link, status) VALUES (?, ?, ?, ?, ?)`);
-                projects.forEach(proj => projStmt.run(proj));
-                projStmt.finalize();
-
-
+                _seedRealData(db);
+            } else {
+                // Auto-migration: replace old placeholder projects on existing DBs
+                // This fires on every Render restart so the production DB self-corrects.
+                db.get(`SELECT title FROM projects WHERE title='Auth Gateway Microservice' OR title='Real-time Data Pipeline' LIMIT 1`, (err, oldRow) => {
+                    if (oldRow) {
+                        console.log('[SYS] Detected old placeholder data. Running auto-migration...');
+                        db.serialize(() => {
+                            db.run('DELETE FROM personal_info');
+                            db.run('DELETE FROM skills');
+                            db.run('DELETE FROM projects');
+                            _seedRealData(db);
+                            console.log('[SYS] Auto-migration complete. Real data is now live.');
+                        });
+                    }
+                });
             }
         });
     });
 };
+
+// ── Shared seed helper ──────────────────────────────────────────
+function _seedRealData(db) {
+    // Personal Info
+    db.run(`INSERT INTO personal_info (name, title, tagline, about, email, github, linkedin, profile_image) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+            "Haile",
+            "Backend Engineer & Systems Architect",
+            "Engineering high-performance backends, resilient APIs, and seamless digital experiences.",
+            "I am a Full-Stack Software Engineer with a passion for building scalable, secure, and intuitive systems. With deep expertise in Node.js, Python, and cloud infrastructure, I focus on the underlying architecture that makes modern web applications fast and reliable.",
+            "hailemeskel.getaneh@outlook.com",
+            "https://github.com/hailemeskel-getaneh",
+            "https://linkedin.com/in/hailemeskel-getaneh",
+            "/uploads/haile.png"
+        ]
+    );
+
+    // Skills
+    const skills = [
+        ["Node.js",     "Runtime",  95, "/uploads/nodejs.png"],
+        ["Python",      "Language", 88, "/uploads/python.png"],
+        ["React",       "Frontend", 92, "/uploads/react.png"],
+        ["PostgreSQL",  "Database", 90, "/uploads/postgres.png"],
+        ["MongoDB",     "Database", 85, "/uploads/mongo.png"],
+        ["Docker",      "DevOps",   88, "/uploads/docker.png"]
+    ];
+    const skillStmt = db.prepare(`INSERT INTO skills (name, category, level, icon_url) VALUES (?, ?, ?, ?)`);
+    skills.forEach(s => skillStmt.run(s));
+    skillStmt.finalize();
+
+    // Projects
+    const projects = [
+        ["wanderEthio", "A comprehensive tourism platform designed to enhance the travel experience in Ethiopia with seamless registration and booking.", "JavaScript, Node.js, Express, MongoDB", "https://github.com/hailemeskel-getaneh/wanderEthio", "PUBLIC"],
+        ["gitglow",     "A premium GitHub statistics generator that creates dynamic, glassmorphism-inspired SVG cards for profile READMEs.",             "JavaScript, SVG, GitHub API, Node.js",     "https://github.com/hailemeskel-getaneh/gitglow",     "STABLE"],
+        ["brainbox",    "A lightweight web application designed to help you capture, organize, and manage thoughts, topics, and notes.",                 "TypeScript, React, Node.js, Express",       "https://github.com/hailemeskel-getaneh/brainbox",    "PUBLIC"],
+        ["QuizApp",     "A MERN stack quiz application with a timer and an admin panel for managing users and questions.",                               "JavaScript, React, Node.js, MongoDB",       "https://github.com/hailemeskel-getaneh/QuizApp",     "PUBLIC"],
+        ["ethco-ai",    "An AI-powered platform for Ethiopian context, leveraging modern machine learning and TypeScript.",                              "TypeScript, React, Tailwind, Python",       "https://github.com/hailemeskel-getaneh/ethco-ai",    "STABLE"]
+    ];
+    const projStmt = db.prepare(`INSERT INTO projects (title, description, technologies, link, status) VALUES (?, ?, ?, ?, ?)`);
+    projects.forEach(p => projStmt.run(p));
+    projStmt.finalize();
+}
+
 
 module.exports = {
     db,

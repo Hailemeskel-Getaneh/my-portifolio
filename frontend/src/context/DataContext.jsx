@@ -20,29 +20,36 @@ export const DataProvider = ({ children }) => {
     useEffect(() => {
         const fetchData = async () => {
             const baseUrl = config.API_URL.replace('/api', '');
-            const fixUrlForBackend = (url) => (url && url.startsWith('/uploads/')) ? `${baseUrl}${url}` : url;
+            const fixUrl = (url) => (url && url.startsWith('/uploads/')) ? `${baseUrl}${url}` : url;
 
             try {
                 const response = await fetch(`${config.API_URL}/public/data`);
-                if (!response.ok) throw new Error('Failed to fetch data');
-                let result = await response.json();
-                
-                if (result && Object.keys(result).length > 0) {
-                    // Process Personal Info from Backend
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const result = await response.json();
+
+                // KEY GUARD: only use backend data if it actually has projects.
+                // If backend returns empty projects (e.g. DB not yet seeded on prod),
+                // we keep the local fallback so the page is never blank.
+                const hasProjects = result?.projects && result.projects.length > 0;
+
+                if (hasProjects) {
+                    // Fix upload URLs to point at the live backend
                     if (result.personalInfo) {
-                        result.personalInfo.profile_image = fixUrlForBackend(result.personalInfo.profile_image);
+                        result.personalInfo.profile_image = fixUrl(result.personalInfo.profile_image);
                     }
-                    // Process Skills from Backend
                     if (result.skills) {
-                        result.skills = result.skills.map(s => ({ ...s, icon_url: fixUrlForBackend(s.icon_url) }));
+                        result.skills = result.skills.map(s => ({ ...s, icon_url: fixUrl(s.icon_url) }));
                     }
-                    setData(result);
+
+                    // Merge with fallback so fields like 'services' are always present
+                    setData({ ...portfolioData, ...result });
+                } else {
+                    // Backend connected but DB is empty — keep local fallback silently
+                    console.info('[DATA_SYNC] Backend returned no projects. Using local fallback.');
                 }
             } catch (err) {
-                console.warn(`[DATA_SYNC] Backend fetch failed. Falling back to frontend assets. Target: ${config.API_URL}`);
-                
-                // Fallback data uses relative paths (which work from frontend public/uploads)
-                setData({ ...portfolioData });
+                // Network failure or backend offline — local fallback is already in state
+                console.warn(`[DATA_SYNC] Backend unreachable. Using local fallback. (${err.message})`);
             } finally {
                 setLoading(false);
             }
